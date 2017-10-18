@@ -19,7 +19,7 @@
 
     padding: ($baseline*0.75) 0 ($baseline*0.75) 0;
 
-    li {
+    .tab {
       display: inline-block;
       list-style: none;
 
@@ -55,6 +55,14 @@
           border-bottom-color: $uxpl-blue-hover-active;
           background-color: transparent;
         }
+      }
+    }
+
+    .tab-secondary {
+      display: none;
+
+      @include media-breakpoint-up(md) {
+        display: inline-block;
       }
     }
   }

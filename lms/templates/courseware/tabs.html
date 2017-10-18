@@ -2,9 +2,10 @@
 
 <%namespace name='static' file='/static_content.html'/>
 <%!
- from django.utils.translation import ugettext as _
- from django.core.urlresolvers import reverse
- %>
+from courseware.tabs import get_course_tab_list
+from django.utils.translation import ugettext as _
+from django.core.urlresolvers import reverse
+%>
 <%page args="tab_list, active_page, default_tab, tab_image" expression_filter="h" />
 
 <%
@@ -12,23 +13,82 @@ def url_class(is_active):
   if is_active:
     return "active"
   return ""
+
+tab_list = get_course_tab_list(request, course)
+primary_tab_list = tab_list[:3]
+secondary_tab_list = tab_list[3:]
 %>
-% for tab in tab_list:
-  <%
-    tab_is_active = tab.tab_id in (active_page, default_tab)
-    tab_class = url_class(tab_is_active)
-  %>
-  <li class="tab">
-  <a href="${tab.link_func(course, reverse)}" class="${tab_class}">
-  ${_(tab.name)}
-  % if tab_is_active:
-      <span class="sr">, current location</span>
-  %endif
-  % if tab_image:
-      ## Translators: 'needs attention' is an alternative string for the
-      ## notification image that indicates the tab "needs attention".
-      <img src="${tab_image}" alt="${_('needs attention')}" />
-  %endif
-  </a>
-  </li>
-% endfor
+% if uses_bootstrap:
+    <nav class="navbar course-tabs pb-0 navbar-expand-lg">
+        <ol class="navbar-nav mr-auto">
+            % for tab in tab_list:
+                <%
+                tab_is_active = tab.tab_id in (active_page, default_tab)
+                %>
+                <li class="nav-item ${'active' if tab_is_active else ''}">
+                    <a href="${tab.link_func(course, reverse)}" class="nav-link">
+                        ${_(tab.name)}
+                        % if tab_is_active:
+                            <span class="sr-only">, ${_('current location')}</span>
+                        %endif
+                        % if tab_image:
+                            ## Translators: 'needs attention' is an alternative string for the
+                            ## notification image that indicates the tab "needs attention".
+                            <img src="${tab_image}" alt="${_('needs attention')}" />
+                        %endif
+                    </a>
+                </li>
+            % endfor
+        </ol>
+    </nav>
+% else:
+    <nav class="${active_page} wrapper-course-material" aria-label="${_('Course Material')}">
+        <div class="course-material">
+            <ol class="tabs course-tabs">
+                % for tab in tab_list:
+                    <%
+                    tab_is_active = tab.tab_id in (active_page, default_tab)
+                    tab_is_primary = tab in primary_tab_list
+                    tab_class = url_class(tab_is_active)
+                    %>
+                    <li class="tab ${'tab-primary' if tab_is_primary else 'tab-secondary'}">
+                        <a href="${tab.link_func(course, reverse)}" class="${tab_class}">
+                            ${_(tab.name)}
+                            % if tab_is_active:
+                                <span class="sr">${_(', current location')}</span>
+                            % endif
+                            % if tab_image:
+                                ## Translators: 'needs attention' is an alternative string for the
+                                ## notification image that indicates the tab "needs attention".
+                                <img src="${tab_image}" alt="${_('needs attention')}" />
+                            %endif
+                        </a>
+                    </li>
+                % endfor
+            </ol>
+            <div>
+                <label for="course-tabs-additiomal">${_('Additional Pages:')}</label>
+                <select id="course-tabs-additiomal" class="course-tabs-additional" onChange="window.location.href=this.value">
+                    % for tab in tab_list:
+                        <%
+                        tab_is_active = tab.tab_id in (active_page, default_tab)
+                        tab_is_primary = tab in primary_tab_list
+                        tab_class = url_class(tab_is_active)
+                        %>
+                        % if not tab_is_primary:
+                            <option value="${tab.link_func(course, reverse)}" ${'selected="selected"' if tab_is_active else ''}>
+                                ${_(tab.name)}
+                                % if tab_image:
+                                    ## Translators: 'needs attention' is an alternative string for the
+                                    ## notification image that indicates the tab "needs attention".
+                                    <img src="${tab_image}" alt="${_('needs attention')}" />
+                                %endif
+                            </option>
+                        % endif
+                    % endfor
+                </select>
+            </div>
+        </div>
+    </nav>
+% endif
+

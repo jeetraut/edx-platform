@@ -52,6 +52,7 @@ $bookmarked-icon: "\f02e"; // .fa-bookmark
 
   .bookmark-button {
     &::before {
+      @include right($baseline / 4);
       content: $bookmark-icon;
       font-family: FontAwesome;
     }
