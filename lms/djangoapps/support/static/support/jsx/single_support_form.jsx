@@ -10,13 +10,13 @@ import FileUpload from './file_upload';
 import ShowErrors from './errors_list';
 import LoggedInUser from './logged_in_user';
 import LoggedOutUser from './logged_out_user';
+import Success from './success';
 
 // TODO
 // edx zendesk APIs
 // access token
 // custom fields ids
 // https://openedx.atlassian.net/browse/LEARNER-2736
-// https://openedx.atlassian.net/browse/LEARNER-2735
 
 class RenderForm extends React.Component {
   constructor(props) {
@@ -24,6 +24,7 @@ class RenderForm extends React.Component {
     this.state = {
       currentRequest: null,
       errorList: [],
+      success: false,
     };
     this.submitForm = this.submitForm.bind(this);
     this.setErrorState = this.setErrorState.bind(this);
@@ -38,6 +39,7 @@ class RenderForm extends React.Component {
   submitForm() {
     const url = 'https://arbisoft.zendesk.com/api/v2/tickets.json',
       $userInfo = $('.user-info'),
+      $this = this,
       request = new XMLHttpRequest(),
       $course = $('#course'),
       accessToken = 'd6ed06821334b6584dd9607d04007c281007324ed07e087879c9c44835c684da',
@@ -78,9 +80,9 @@ class RenderForm extends React.Component {
 
       request.onreadystatechange = function success() {
         if (request.readyState === 4 && request.status === 201) {
-          // TODO needs to remove after implementing success page
-          const alert = 'Request submitted successfully.';
-          alert();
+          $this.setState({
+            success: true,
+          });
         }
       };
 
@@ -119,6 +121,16 @@ class RenderForm extends React.Component {
   }
 
   render() {
+    if (this.state.success) {
+      return (
+        <Success
+          homepageUrl={this.props.context.homepageUrl}
+          dashboardUrl={this.props.context.dashboardUrl}
+          isLoggedIn={this.props.context.user && true}
+        />
+      );
+    }
+
     let userElement;
     if (this.props.context.user) {
       userElement = <LoggedInUser userInformation={this.props.context.user} />;
