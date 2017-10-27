@@ -22,8 +22,6 @@ import lms_xblock.runtime
 
 from startup_configurations.validate_config import validate_lms_config
 
-from microsite_configuration import microsite
-
 log = logging.getLogger(__name__)
 
 
@@ -36,19 +34,11 @@ def run():
     """
     django_db_models_options.patch()
 
-    # We currently use 2 template rendering engines, mako and django_templates,
-    # and one of them (django templates), requires the directories be added
-    # before the django.setup().
-    microsite.enable_microsites_pre_startup(log)
-
     django.setup()
 
     autostartup()
 
     add_mimetypes()
-
-    # Mako requires the directories to be added after the django setup.
-    microsite.enable_microsites(log)
 
     # Initialize Segment analytics module by setting the write_key.
     if settings.LMS_SEGMENT_KEY:
