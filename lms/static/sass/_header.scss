@@ -192,7 +192,6 @@
         }
 
         .dropdown-user-menu {
-          display: none;
           border: 1px solid theme-color("secondary");
           position: absolute;
           background-color: theme-color("inverse");
@@ -314,6 +313,11 @@
       }
     }
   }
+
+  // Hiding and displaying control classes
+  .hidden {
+    display: none !important;
+  }
 }
 
 /*
@@ -327,8 +331,6 @@
   }
 
   @include media-breakpoint-down(md) {
-    display: none;
-
     // Override standard styling for the mobile menu links
     .mobile-nav-link {
       position: static;
@@ -362,6 +364,11 @@
         }
       }
     }
+  }
+
+  // Hiding and displaying control classes
+  &.hidden {
+    display: none !important;
   }
 }
 
