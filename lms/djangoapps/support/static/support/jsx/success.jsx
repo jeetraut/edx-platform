@@ -7,11 +7,11 @@ function Success({homepageUrl, dashboardUrl, isLoggedIn}) {
   let btnText,
     btnUrl;
   if (isLoggedIn) {
-    btnText = 'Go to my Dashboard';
-    btnUrl = {dashboardUrl}
+    btnText = gettext('Go to my Dashboard');
+    btnUrl = dashboardUrl
   } else {
-    btnText = 'Go to edX Home';
-    btnUrl = {homepageUrl}
+    btnText = gettext('Go to edX Home');
+    btnUrl = homepageUrl
   }
   return (<div className="contact-us-wrapper">
     <div className="row">
@@ -31,12 +31,10 @@ function Success({homepageUrl, dashboardUrl, isLoggedIn}) {
         <a
           href={btnUrl}
           className="btn btn-secondary help-button"
-        >
-          {gettext(btnText)}
+        >{btnText}
         </a>
       </div>
     </div>
-
   </div>);
 }
 
