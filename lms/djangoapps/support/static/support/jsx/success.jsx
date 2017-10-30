@@ -4,6 +4,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 function Success({homepageUrl, dashboardUrl, isLoggedIn}) {
+  let btnText,
+    btnUrl;
+  if (isLoggedIn) {
+    btnText = 'Go to my Dashboard';
+    btnUrl = {dashboardUrl}
+  } else {
+    btnText = 'Go to edX Home';
+    btnUrl = {homepageUrl}
+  }
   return (<div className="contact-us-wrapper">
     <div className="row">
       <div className="col-sm-12">
@@ -19,22 +28,12 @@ function Success({homepageUrl, dashboardUrl, isLoggedIn}) {
 
     <div className="row">
       <div className="col-sm-12">
-        {isLoggedIn &&
         <a
-          href={dashboardUrl}
+          href={btnUrl}
           className="btn btn-secondary help-button"
         >
-          {gettext('Go to my Dashboard')}
+          {gettext(btnText)}
         </a>
-        }
-        {!isLoggedIn &&
-        <a
-          href={homepageUrl}
-          className="btn btn-secondary help-button"
-        >
-          {gettext('Go to edX Home')}
-        </a>
-        }
       </div>
     </div>
 

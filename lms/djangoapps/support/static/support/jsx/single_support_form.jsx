@@ -37,12 +37,11 @@ class RenderForm extends React.Component {
   }
 
   submitForm() {
-    const url = 'https://arbisoft.zendesk.com/api/v2/tickets.json',
+    const url = 'https://example.zendesk.com/api/v2/tickets.json',
       $userInfo = $('.user-info'),
-      $this = this,
       request = new XMLHttpRequest(),
       $course = $('#course'),
-      accessToken = 'd6ed06821334b6584dd9607d04007c281007324ed07e087879c9c44835c684da',
+      accessToken = 'abc000',
       data = {
         subject: $('#subject').val(),
         comment: {
@@ -80,11 +79,11 @@ class RenderForm extends React.Component {
 
       request.onreadystatechange = function success() {
         if (request.readyState === 4 && request.status === 201) {
-          $this.setState({
+          this.setState({
             success: true,
           });
         }
-      };
+      }.bind(this);
 
       request.onerror = function error() {
         this.setErrorState([gettext('Something went wrong. Please try again later.')]);
