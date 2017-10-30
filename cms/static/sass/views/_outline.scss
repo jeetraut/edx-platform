@@ -640,6 +640,20 @@
     color: $uxpl-blue-base;
   }
 
+  .number-highlights {
+    background: #0075b4;
+    border-radius: 0.8em;
+    -moz-border-radius: 0.8em;
+    -webkit-border-radius: 0.8em;
+    color: #ffffff;
+    display: inline-block;
+    font-weight: bold;
+    line-height: 1.5em;
+    margin-right: 2px;
+    text-align: center;
+    width: 1.5em;
+  }
+
   .highlight-input-text {
     width: 100%;
     margin-bottom: 5px;
